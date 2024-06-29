@@ -1,0 +1,1 @@
+[middlefinger_x0,middlefinger_y0] = hd.x[0][12],hd.y[0][12]
