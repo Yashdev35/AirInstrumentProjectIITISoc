@@ -1,3 +1,4 @@
+<!-- 
 # Air-Guitar
 
 Air-Guitar is a unique project, which allows you to simulate the experience of playing a guitar without actually having one. It uses hand detection technology to create an interactive and fun musical experience.
@@ -15,3 +16,5 @@ Air-Guitar is a unique project, which allows you to simulate the experience of p
 ## Feedback
 
 I welcome feedback on the Air-Guitar project. If you have a feature request, bug report, or any suggestions, please feel free to open an issue.
+=======
+# Air-Instruments. -->
