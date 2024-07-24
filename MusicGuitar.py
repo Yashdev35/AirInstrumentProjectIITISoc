@@ -19,6 +19,7 @@ import mediapipe as mp
 from pyautogui import size 
 from math import sin, cos, atan2, pi
 from pygame import mixer
+import numpy as np
 from volumeguesturecontrol import volControl
 def rainbow_gradient(num_colors):
     """
@@ -472,6 +473,52 @@ def FingerLog(point,finger):
         None
     '''
     print("Finger {} => x: {} y: {} z: {}".format(finger,point[finger].x, point[finger].y,point[finger].z))
+    
+# Load the guitar image
+guitar_image = cv2.imread('path/to/guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
+def overlayGuitar(image, wrist, index_tip, guitar_image):
+    """
+    Overlay a guitar image on the hand landmarks.
+    :param image: The main image where the guitar will be overlayed.
+    :param wrist: Wrist landmark from the hand.
+    :param index_tip: Index finger tip landmark from the hand.
+    :param guitar_image: The guitar image with alpha channel.
+    :return: Image with the guitar overlay.
+    """
+    try:
+        # Coordinates in the main image
+        wrist_coords = (int(wrist.x * image.shape[1]), int(wrist.y * image.shape[0]))
+        index_tip_coords = (int(index_tip.x * image.shape[1]), int(index_tip.y * image.shape[0]))
+
+        # Calculate the size of the guitar based on the distance between wrist and index finger tip
+        distance = int(np.linalg.norm(np.array(wrist_coords) - np.array(index_tip_coords)))
+        scaling_factor = distance / guitar_image.shape[1]
+
+        # Resize the guitar image
+        guitar_resized = cv2.resize(guitar_image, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+
+        # Calculate the position for overlay
+        overlay_x = wrist_coords[0] - guitar_resized.shape[1] // 2
+        overlay_y = wrist_coords[1] - guitar_resized.shape[0] // 2
+
+        # Ensure the overlay position is within image boundaries
+        overlay_x = max(0, min(overlay_x, image.shape[1] - guitar_resized.shape[1]))
+        overlay_y = max(0, min(overlay_y, image.shape[0] - guitar_resized.shape[0]))
+
+        # Extract the alpha channel from the guitar image for masking
+        alpha_mask = guitar_resized[:, :, 3] / 255.0
+        alpha_inv = 1.0 - alpha_mask
+
+        # Overlay the guitar image using alpha blending
+        for c in range(0, 3):
+            image[overlay_y:overlay_y + guitar_resized.shape[0], overlay_x:overlay_x + guitar_resized.shape[1], c] = \
+                (alpha_mask * guitar_resized[:, :, c] +
+                 alpha_inv * image[overlay_y:overlay_y + guitar_resized.shape[0], overlay_x:overlay_x + guitar_resized.shape[1], c])
+
+        return image
+    except KeyError as e:
+        print(f"KeyError: {e} - Check if landmarks contain the required keys.")
+        return image
 # ------------------------------------------------------------------------------------------------
 def main():
 
@@ -527,7 +574,7 @@ def main():
             cv2.putText(image, "Use the finger with the red dot to play.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
             y_position += line_height
             cv2.putText(image, "Remove one hand from frame for volume control.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
-            left = {"Wrist" : results.multi_hand_landmarks[0].landmark[0], "Thumb CMC" : results.multi_hand_landmarks[0].landmark[1], \
+            left = {"Wrist" : results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.WRIST], "Thumb CMC" : results.multi_hand_landmarks[0].landmark[1], \
                     "Thumb MCP" : results.multi_hand_landmarks[0].landmark[2], "Thumb IP" : results.multi_hand_landmarks[0].landmark[3], \
                     "Thumb TIP" : results.multi_hand_landmarks[0].landmark[4], "Index MCP" : results.multi_hand_landmarks[0].landmark[5], \
                     "Index PIP" : results.multi_hand_landmarks[0].landmark[6], "Index DIP" : results.multi_hand_landmarks[0].landmark[7], \
@@ -538,7 +585,7 @@ def main():
                     "Ring TIP" : results.multi_hand_landmarks[0].landmark[16], "Pinky MCP" : results.multi_hand_landmarks[0].landmark[17], \
                     "Pinky PIP" : results.multi_hand_landmarks[0].landmark[18], "Pinky DIP" : results.multi_hand_landmarks[0].landmark[19], \
                     "Pinky TIP" : results.multi_hand_landmarks[0].landmark[20]}
-            right = {"Wrist" : results.multi_hand_landmarks[1].landmark[0], "Thumb CMC" : results.multi_hand_landmarks[1].landmark[1], \
+            right = {"Wrist": results.multi_hand_landmarks[1].landmark[mp_hands.HandLandmark.WRIST], "Thumb CMC" : results.multi_hand_landmarks[1].landmark[1], \
                      "Thumb MCP" : results.multi_hand_landmarks[1].landmark[2], "Thumb IP" : results.multi_hand_landmarks[1].landmark[3], \
                      "Thumb TIP" : results.multi_hand_landmarks[1].landmark[4], "Index MCP" : results.multi_hand_landmarks[1].landmark[5], \
                      "Index PIP" : results.multi_hand_landmarks[1].landmark[6], "Index DIP" : results.multi_hand_landmarks[1].landmark[7], \
@@ -549,6 +596,12 @@ def main():
                         "Ring TIP" : results.multi_hand_landmarks[1].landmark[16], "Pinky MCP" : results.multi_hand_landmarks[1].landmark[17], \
                         "Pinky PIP" : results.multi_hand_landmarks[1].landmark[18], "Pinky DIP" : results.multi_hand_landmarks[1].landmark[19], \
                         "Pinky TIP" : results.multi_hand_landmarks[1].landmark[20]}
+                        # Extract specific landmarks
+            wrist_landmark = results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.WRIST]
+            index_tip_landmark = results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+
+            # Call the overlayGuitar function with the specific landmarks
+            image = overlayGuitar(image, wrist_landmark, index_tip_landmark, guitar_image)
 
             if ExplicitMarking:
                 OneHandExist = True
