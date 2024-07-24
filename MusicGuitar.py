@@ -19,6 +19,7 @@ import mediapipe as mp
 from pyautogui import size 
 from math import sin, cos, atan2, pi
 from pygame import mixer
+from volumeguesturecontrol import volControl
 def rainbow_gradient(num_colors):
     """
     -------------------------------------------------------------
@@ -491,10 +492,12 @@ def main():
         min_tracking_confidence=0.5)
     if ExplicitMarking:
         OneHandExist = False
+    
+    
 
     while cap.isOpened():
         image, results = initializeHandsCode(hands,cap)
-
+        
         if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 2:
             cv2.putText(image, "Two Hands Detected", (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
             left = {"Wrist" : results.multi_hand_landmarks[0].landmark[0], "Thumb CMC" : results.multi_hand_landmarks[0].landmark[1], \
@@ -533,6 +536,11 @@ def main():
                 markHands(image, results, left, mp_drawing=mp_drawing, mp_drawing_styles=mp_drawing_styles, mp_hands=mp_hands)
 
             cv2.putText(image, "One Hand Detected", (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+                        # Volume control logic
+            x = [[hand_landmark.x for hand_landmark in results.multi_hand_landmarks[0].landmark]]
+            y = [[hand_landmark.y for hand_landmark in results.multi_hand_landmarks[0].landmark]]
+            image = volControl(image, x, y)
+
         else:
             cv2.putText(image, "No Hands Detected", (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
         showImage(image)
