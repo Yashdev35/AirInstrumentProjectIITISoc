@@ -497,9 +497,36 @@ def main():
 
     while cap.isOpened():
         image, results = initializeHandsCode(hands,cap)
-        
+
+        # Set up color and initial position
+        color = (0, 255, 0)
+        initial_y_position = 30
+        line_height = 25
+
+        # Check for single hand and display relevant instructions
+        if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 1:
+            y_position = initial_y_position
+            cv2.putText(image, "Use one hand for volume control.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Put the other hand to start playing guitar.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Use thumb and index finger to control volume.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Keep them close to the camera.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            # Call the volume control function
+            landmarks = results.multi_hand_landmarks
+            image = volControl(image, landmarks)
+
+        # Check for two hands and display relevant instructions
         if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 2:
-            cv2.putText(image, "Two Hands Detected", (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+            y_position = initial_y_position
+            cv2.putText(image, "To play guitar, put both hands in front.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Rotate the hand with strings to connect.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Use the finger with the red dot to play.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            y_position += line_height
+            cv2.putText(image, "Remove one hand from frame for volume control.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
             left = {"Wrist" : results.multi_hand_landmarks[0].landmark[0], "Thumb CMC" : results.multi_hand_landmarks[0].landmark[1], \
                     "Thumb MCP" : results.multi_hand_landmarks[0].landmark[2], "Thumb IP" : results.multi_hand_landmarks[0].landmark[3], \
                     "Thumb TIP" : results.multi_hand_landmarks[0].landmark[4], "Index MCP" : results.multi_hand_landmarks[0].landmark[5], \
@@ -536,19 +563,22 @@ def main():
                 markHands(image, results, left, mp_drawing=mp_drawing, mp_drawing_styles=mp_drawing_styles, mp_hands=mp_hands)
 
             cv2.putText(image, "One Hand Detected", (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
-                        # Volume control logic
-            x = [[hand_landmark.x for hand_landmark in results.multi_hand_landmarks[0].landmark]]
-            y = [[hand_landmark.y for hand_landmark in results.multi_hand_landmarks[0].landmark]]
-            image = volControl(image, x, y)
 
         else:
             cv2.putText(image, "No Hands Detected", (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+
+                 # Add text at the bottom of the image to inform the user about quitting
+        cv2.putText(image, "Press 'q' to quit", (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)    
         showImage(image)
-        endCode(cap,hands,debug = False)
+        # Check if 'q' key is pressed to quit
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    endCode(cap,hands,debug = False)
+
+
     
 
 
 if __name__ == "__main__":
     main()
-
     
