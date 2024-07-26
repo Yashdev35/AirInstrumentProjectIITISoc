@@ -8,7 +8,7 @@ from volumeguesturecontrol_guitar import volControl
 
 class VirGuitar():
         def __init__(self):
-            self.SoundChannel, self.sound = self.initializeMusic()
+            self.SoundChannel, self.sound = self.initializeMusicGui()
             self.color = (0, 0, 0)
             self.ExplicitMarking = True
             self.mp_drawing = mp.solutions.drawing_utils
@@ -22,9 +22,9 @@ class VirGuitar():
             if self.ExplicitMarking:
                 self.OneHandExist = False
 
-            self.start() 
+            self.startGui() 
 
-        def rainbow_gradient(self,num_colors):
+        def rainbow_gradient_Gui(self,num_colors):
             colors = []
             for i in range(num_colors):
                 r, g, b = 0, 0, 0
@@ -51,19 +51,19 @@ class VirGuitar():
 
 
 
-        def ResizeWithAspectRatio(self,image, width = 1920, height= 1080, inter=cv2.INTER_AREA):
+        def ResizeWithAspectRatioGui(self,image, width = 1920, height= 1080, inter=cv2.INTER_AREA):
             dim = None
             (h, w) = image.shape[:2]
             r = width / float(w)
             dim = (width, int(h * r))
             return cv2.resize(image, dim, interpolation=inter)
 
-        def MusicFileNameBuilder(self,string,folder = "Media"):
+        def MusicFileNameBuilderGui(self,string,folder = "Media"):
             stringToString = { 0 : "E2", 1 : "A2", 2 : "D3", 3 : "G3", 4 : "B3", 5 : "E4"}
             fileName = folder + "/" + stringToString[string] + ".wav"
             return fileName
 
-        def initializeMusic(self,folder = 'samples_guitar'):
+        def initializeMusicGui(self,folder = 'samples_guitar'):
             mixer.init()
             stringToString = { 0 : "E2", 1 : "A2", 2 : "D3", 3 : "G3", 4 : "B3", 5 : "E4"}
             SoundChannel = {}
@@ -73,7 +73,7 @@ class VirGuitar():
                 Sound[key] = mixer.Sound(folder+"/" + value.strip() + ".wav")
             return SoundChannel,Sound
 
-        def initializeHandsCode(self, hands,cap):
+        def initializeHandsCodeGui(self, hands,cap):
             success, image = cap.read()
             image =  cv2.flip(image, 1)
             if not success:
@@ -85,7 +85,7 @@ class VirGuitar():
             results = hands.process(image)
             return image, results
 
-        def endCode(self,cap,hands,debug = False):
+        def endCodeGui(self,cap,hands,debug = False):
             if debug:
                 WaitVal = 0
             else:
@@ -96,7 +96,7 @@ class VirGuitar():
                 hands.close()
                 return True
 
-        def markHands(self,image, results, point, mp_drawing, mp_drawing_styles, mp_hands):
+        def markHandsGui(self,image, results, point, mp_drawing, mp_drawing_styles, mp_hands):
 
             for hand_no,hand_landmarks in enumerate(results.multi_hand_landmarks):
                 for part,vals in point.items():
@@ -109,12 +109,12 @@ class VirGuitar():
                     mp_drawing_styles.get_default_hand_landmarks_style(),
                     mp_drawing_styles.get_default_hand_connections_style())
 
-        def showImage(self,image):
-            image = self.ResizeWithAspectRatio(image, width=int(size()[0]/2), height=int(size()[1]/2))
+        def showImageGui(self,image):
+            image = self.ResizeWithAspectRatioGui(image, width=int(size()[0]/2), height=int(size()[1]/2))
             cv2.imshow('MediaPipe Hands', image)
             return
 
-        def DrawLine(self,image,point1,point2,length = 3 ,xoffset = 0, yoffset = 0,offset = 0 ,Lncolor = (255,0,0) , Hand = True , OneHand = False, log = False,thick=5 ):
+        def DrawLineGui(self,image,point1,point2,length = 3 ,xoffset = 0, yoffset = 0,offset = 0 ,Lncolor = (255,0,0) , Hand = True , OneHand = False, log = False,thick=5 ):
             if offset != 0:
                 xoffset = offset
                 yoffset = offset
@@ -133,7 +133,7 @@ class VirGuitar():
             cv2.line(image, startpoint, endpoint, Lncolor, thickness=thick)
             return startpoint, endpoint
 
-        def NewPos(self,image,AnchorStartPoint,AnchorEndPoint,offset = 20,length = 4 , absoulute_offset = 40, absolute_length = False):
+        def NewPosGui(self,image,AnchorStartPoint,AnchorEndPoint,offset = 20,length = 4 , absoulute_offset = 40, absolute_length = False):
             x1,y1 = int(AnchorStartPoint.x * image.shape[1]), int(AnchorStartPoint.y * image.shape[0])
             x2,y2 = int(AnchorEndPoint.x * image.shape[1]), int(AnchorEndPoint.y * image.shape[0])
 
@@ -160,7 +160,7 @@ class VirGuitar():
                 endpoint = (int(endpoint[0] + (endpoint[0] - startpoint[0]) * length),int(endpoint[1] + (endpoint[1] - startpoint[1]) * length))
             return startpoint, endpoint
 
-        def LineOffset(self,x1,y1,x2,y2,value = 0):
+        def LineOffsetGui(self,x1,y1,x2,y2,value = 0):
 
             if value == 0:
                 return (x2,y2)
@@ -172,9 +172,9 @@ class VirGuitar():
 
             return (x2,y2)
 
-        def DrawBoard(self,image, AnchorStartPoint,AnchorEndPoint , lines = 4, offset = 0,dynamic = False,log = False , length = 2, thickness = 4 , absolute_length = False, absoulute_offset = 0 , fretOffset = 0):
+        def DrawBoardGui(self,image, AnchorStartPoint,AnchorEndPoint , lines = 4, offset = 0,dynamic = False,log = False , length = 2, thickness = 4 , absolute_length = False, absoulute_offset = 0 , fretOffset = 0):
 
-            col = self.rainbow_gradient(lines)
+            col = self.rainbow_gradient_Gui(lines)
 
             posList = []
 
@@ -187,9 +187,9 @@ class VirGuitar():
             Stoffset = -(lines//2) * offset
 
             for stringLine in range(lines):
-                start,end = self.NewPos(image,AnchorStartPoint,AnchorEndPoint,offset = Stoffset, absolute_length=absolute_length , absoulute_offset = absoulute_offset , length = length)
-                start = self.LineOffset(end[0],end[1],start[0],start[1],value = fretOffset)
-                self.DrawLine(image, start, end, length=length,Hand=False,log=log,Lncolor=col[stringLine],thick=thickness)
+                start,end = self.NewPosGui(image,AnchorStartPoint,AnchorEndPoint,offset = Stoffset, absolute_length=absolute_length , absoulute_offset = absoulute_offset , length = length)
+                start = self.LineOffsetGui(end[0],end[1],start[0],start[1],value = fretOffset)
+                self.DrawLineGui(image, start, end, length=length,Hand=False,log=log,Lncolor=col[stringLine],thick=thickness)
                 posList.append((start,end))
                 Stoffset += offset
 
@@ -198,7 +198,7 @@ class VirGuitar():
 
             return posList
 
-        def ContactCheck(self,image,draw, finger,sound,SoundChannel,log = False, accuracy = 10, logSize = 0.75, logColor = (0, 255, 0)):
+        def ContactCheckGui(self,image,draw, finger,sound,SoundChannel,log = False, accuracy = 10, logSize = 0.75, logColor = (0, 255, 0)):
             thumb_x = int(finger.x * image.shape[1])
             thumb_y = int(finger.y * image.shape[0])
             thumb_z = abs(finger.z) / accuracy
@@ -214,11 +214,11 @@ class VirGuitar():
                 if abs((y2 - y1) * thumb_x - (x2 - x1) * thumb_y + x2 * y1 - y2 * x1) / ((y2 - y1) ** 2 + (x2 - x1) ** 2) <= thumb_z:
                     SoundChannel[GuitarString].play(sound[GuitarString])
 
-        def DrawBoardLog(self,draw):
+        def DrawBoardLogGui(self,draw):
             for i in range(len(draw)):
                 print("Line {} => Start {} --> End {}".format(i, draw[i][0], draw[i][1]))
 
-        def AddBlobToFinger(self,image, finger, color = (0, 0, 255), radius = 25,log = False , thickness = 2):
+        def AddBlobToFingerGui(self,image, finger, color = (0, 0, 255), radius = 25,log = False , thickness = 2):
             if log:
                 print("Finger => x: {} y: {} z: {}".format(finger.x, finger.y, finger.z))
                 print("coords: {}, {}".format(int(finger.x * image.shape[1]), int(finger.y * image.shape[0])))
@@ -229,7 +229,7 @@ class VirGuitar():
             radius = int(radius * abs(finger.z) ** 0.2)
             cv2.circle(image, (int(finger.x * image.shape[1]), int(finger.y * image.shape[0])), radius, color,thickness)
         
-        def FingerLog(self,point,finger):
+        def FingerLogGui(self,point,finger):
             print("Finger {} => x: {} y: {} z: {}".format(finger,point[finger].x, point[finger].y,point[finger].z))
             
         guitar_image = cv2.imread('guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
@@ -278,9 +278,9 @@ class VirGuitar():
                 print(f"KeyError: {e} - Check if landmarks contain the required keys.")
                 return image
 
-        def start(self):
+        def startGui(self):
             while self.cap.isOpened():
-                image, results = self.initializeHandsCode(self.hands, self.cap)
+                image, results = self.initializeHandsCodeGui(self.hands, self.cap)
 
                 self.color = (0, 255, 0)
                 initial_y_position = 30
@@ -339,15 +339,15 @@ class VirGuitar():
 
                     if self.ExplicitMarking:
                         self.OneHandExist = True
-                        self.markHands(image, results, left, mp_drawing=self.mp_drawing, mp_drawing_styles=self.mp_drawing_styles, mp_hands=self.mp_hands)
+                        self.markHandsGui(image, results, left, mp_drawing=self.mp_drawing, mp_drawing_styles=self.mp_drawing_styles, mp_hands=self.mp_hands)
 
-                    draw = self.DrawBoard(image, right["Index MCP"], right["Pinky MCP"], lines=6, length=4, offset=20, log=False, dynamic=True, fretOffset=20)
-                    self.AddBlobToFinger(image, left["Index TIP"])
-                    self.ContactCheck(image, draw, left["Index TIP"], sound=self.sound, SoundChannel=self.SoundChannel, log=False, accuracy=5, logColor=self.color)
+                    draw = self.DrawBoardGui(image, right["Index MCP"], right["Pinky MCP"], lines=6, length=4, offset=20, log=False, dynamic=True, fretOffset=20)
+                    self.AddBlobToFingerGui(image, left["Index TIP"])
+                    self.ContactCheckGui(image, draw, left["Index TIP"], sound=self.sound, SoundChannel=self.SoundChannel, log=False, accuracy=5, logColor=self.color)
 
                 elif results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 1:
                     if self.ExplicitMarking and self.OneHandExist:
-                        self.markHands(image, results, left, mp_drawing=self.mp_drawing, mp_drawing_styles=self.mp_drawing_styles, mp_hands=self.mp_hands)
+                        self.markHandsGui(image, results, left, mp_drawing=self.mp_drawing, mp_drawing_styles=self.mp_drawing_styles, mp_hands=self.mp_hands)
 
                     cv2.putText(image, "One Hand Detected", (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, self.color, 2)
 
@@ -355,11 +355,11 @@ class VirGuitar():
                     cv2.putText(image, "No Hands Detected", (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, self.color, 2)
 
                 cv2.putText(image, "Press 'q' to quit", (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-                self.showImage(image)
+                self.showImageGui(image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-            self.endCode(self.cap, self.hands, debug=False)    
+            self.endCodeGui(self.cap, self.hands, debug=False)    
     # ------------------------------------------------------------------------------------------------
 
 
