@@ -20,7 +20,7 @@ from pyautogui import size
 from math import sin, cos, atan2, pi
 from pygame import mixer
 import numpy as np
-from volumeguesturecontrol import volControl
+from volumegesturecontrol import volControl
 def rainbow_gradient(num_colors):
     """
     -------------------------------------------------------------
@@ -197,7 +197,7 @@ def markHands(image, results, point, mp_drawing, mp_drawing_styles, mp_hands):
         for part,vals in point.items():
             h , w , c = image.shape
             cx , cy = int(vals.x * w) , int(vals.y * h)
-            cv2.putText(image,"{:.2f} {:.2f}".format(vals.x,vals.y), (cx, cy), cv2.FONT_HERSHEY_PLAIN, vals.z * -5, (0, 0, 255), 1)
+            # cv2.putText(image,"{:.2f} {:.2f}".format(vals.x,vals.y), (cx, cy), cv2.FONT_HERSHEY_PLAIN, vals.z * -5, (0, 0, 255), 1)
 
         mp_drawing.draw_landmarks(
             image,
