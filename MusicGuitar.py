@@ -475,7 +475,7 @@ def FingerLog(point,finger):
     print("Finger {} => x: {} y: {} z: {}".format(finger,point[finger].x, point[finger].y,point[finger].z))
     
 # Load the guitar image
-guitar_image = cv2.imread('path/to/guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
+guitar_image = cv2.imread('guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
 def overlayGuitar(image, wrist, index_tip, guitar_image):
     """
     Overlay a guitar image on the hand landmarks.
