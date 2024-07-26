@@ -4,7 +4,7 @@ from pyautogui import size
 from math import sin, cos, atan2, pi
 from pygame import mixer
 import numpy as np
-from volumeguesturecontrol_guitar import volControl
+from volumeguesturecontrol_guitar import volControlGuitar
 
 class VirGuitar():
         def __init__(self):
@@ -296,7 +296,7 @@ class VirGuitar():
                     y_position += line_height
                     cv2.putText(image, "Keep them close to the camera.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, self.color, 2)
                     landmarks = results.multi_hand_landmarks
-                    image = volControl(image, landmarks)
+                    image = volControlGuitar(image, landmarks)
 
                 if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 2:
                     y_position = initial_y_position

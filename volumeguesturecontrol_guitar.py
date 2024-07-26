@@ -15,7 +15,7 @@ maxVol = volRange[1]
 vol = 0
 volBar = 400
 volPer = 0
-def volControl(img, landmarks):
+def volControlGuitar(img, landmarks):
     if len(landmarks) != 0:
         for hand_landmarks in landmarks:
             # Get the coordinates of the thumb tip (landmark 4) and the index finger tip (landmark 8)
