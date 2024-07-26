@@ -193,18 +193,18 @@ def markHands(image, results, point, mp_drawing, mp_drawing_styles, mp_hands):
     '''
 
     # making the marks on the hands
-    for hand_no,hand_landmarks in enumerate(results.multi_hand_landmarks):
-        for part,vals in point.items():
-            h , w , c = image.shape
-            cx , cy = int(vals.x * w) , int(vals.y * h)
-            # cv2.putText(image,"{:.2f} {:.2f}".format(vals.x,vals.y), (cx, cy), cv2.FONT_HERSHEY_PLAIN, vals.z * -5, (0, 0, 255), 1)
+    # for hand_no,hand_landmarks in enumerate(results.multi_hand_landmarks):
+    #     for part,vals in point.items():
+    #         h , w , c = image.shape
+    #         cx , cy = int(vals.x * w) , int(vals.y * h)
+    #         # cv2.putText(image,"{:.2f} {:.2f}".format(vals.x,vals.y), (cx, cy), cv2.FONT_HERSHEY_PLAIN, vals.z * -5, (0, 0, 255), 1)
 
-        mp_drawing.draw_landmarks(
-            image,
-            hand_landmarks,
-            mp_hands.HAND_CONNECTIONS,
-            mp_drawing_styles.get_default_hand_landmarks_style(),
-            mp_drawing_styles.get_default_hand_connections_style())
+    #     mp_drawing.draw_landmarks(
+    #         image,
+    #         hand_landmarks,
+    #         mp_hands.HAND_CONNECTIONS,
+    #         mp_drawing_styles.get_default_hand_landmarks_style(),
+    #         mp_drawing_styles.get_default_hand_connections_style())
 
 def showImage(image):
     '''
@@ -546,9 +546,9 @@ def main():
         image, results = initializeHandsCode(hands,cap)
 
         # Set up color and initial position
-        color = (0, 255, 0)
-        initial_y_position = 30
-        line_height = 25
+        color = (0, 0, 0)
+        initial_y_position = 25
+        line_height = 40
 
         # Check for single hand and display relevant instructions
         if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 1:
@@ -621,7 +621,7 @@ def main():
             cv2.putText(image, "No Hands Detected", (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
 
                  # Add text at the bottom of the image to inform the user about quitting
-        cv2.putText(image, "Press 'q' to quit", (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)    
+        cv2.putText(image, "Press 'q' to quit", (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)    
         showImage(image)
         # Check if 'q' key is pressed to quit
         if cv2.waitKey(1) & 0xFF == ord('q'):
