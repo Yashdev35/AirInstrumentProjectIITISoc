@@ -17,6 +17,9 @@ Welcome to the Air Instrument Project! This innovative project leverages the pow
 - ![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarss.png)
 
 - ![2](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarssv.png)
+  
+- -![3](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo3.jpg)
+
 
 *The virtual guitar demo showcases chord playing and volume control through hand movements.*
 
@@ -33,6 +36,7 @@ Welcome to the Air Instrument Project! This innovative project leverages the pow
 
 - ![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum.jpg)
 - ![2](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum2.jpg)
+-![3](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo3.jpg)
 
 *Watch the virtual drums in action, with each drum and cymbal responding to specific hand gestures.*
 
