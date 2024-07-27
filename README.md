@@ -12,7 +12,7 @@ Welcome to the Air Instrument Project! This innovative project leverages the pow
 ## Demo Videos
 ### Guitar
 
-![Guitar Demo](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/Guitar_demo.mp4)
+![Guitar Video Demo](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/Guitar_demo.mp4)
 
 - ![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarss.png)
 
