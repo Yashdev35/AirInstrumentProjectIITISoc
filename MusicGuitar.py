@@ -5,6 +5,7 @@ from math import sin, cos, atan2, pi
 from pygame import mixer
 import numpy as np
 from volumeguesturecontrol_guitar import volControl
+from screeninfo import get_monitors
 
 class VirGuitar():
         def __init__(self):
@@ -114,23 +115,42 @@ class VirGuitar():
             cv2.imshow('MediaPipe Hands', image)
             return
 
-        def DrawLine(self,image,point1,point2,length = 3 ,xoffset = 0, yoffset = 0,offset = 0 ,Lncolor = (255,0,0) , Hand = True , OneHand = False, log = False,thick=5 ):
+        def DrawLine(self, image, point1, point2, length=3, xoffset=0, yoffset=0, offset=0, Lncolor=(0, 0, 0, 0), Hand=True, OneHand=False, log=False, thick=5):
             if offset != 0:
                 xoffset = offset
                 yoffset = offset
             if OneHand:
-                startpoint = (int(point1.x * image.shape[1]) + xoffset ,int(point1.y * image.shape[0]) + yoffset)
+                startpoint = (int(point1.x * image.shape[1]) + xoffset, int(point1.y * image.shape[0]) + yoffset)
                 endpoint = point2
             elif Hand:
-                startpoint = (int(point1.x * image.shape[1]) + xoffset ,int(point1.y * image.shape[0]) + yoffset )
-                endpoint = (int(point2.x * image.shape[1]) + xoffset ,int(point2.y * image.shape[0]) + yoffset )
-                endpoint = (int(endpoint[0] + (endpoint[0] - startpoint[0]) * length),int(endpoint[1] + (endpoint[1] - startpoint[1]) * length))
+                startpoint = (int(point1.x * image.shape[1]) + xoffset, int(point1.y * image.shape[0]) + yoffset)
+                endpoint = (int(point2.x * image.shape[1]) + xoffset, int(point2.y * image.shape[0]) + yoffset)
+                endpoint = (int(endpoint[0] + (endpoint[0] - startpoint[0]) * length), int(endpoint[1] + (endpoint[1] - startpoint[1]) * length))
             else:
                 startpoint = point1
                 endpoint = point2
             if log:
-                print("startpoint: {}, endpoint: {}".format(startpoint,endpoint))
-            cv2.line(image, startpoint, endpoint, Lncolor, thickness=thick)
+                print("startpoint: {}, endpoint: {}".format(startpoint, endpoint))
+
+            # Create a transparent layer with the same dimensions as the original image
+            height, width, _ = image.shape
+            transparent_layer = np.zeros((height, width, 4), dtype=np.uint8)
+
+            # Draw the line on the transparent layer
+            cv2.line(transparent_layer, startpoint, endpoint, Lncolor, thickness=thick)
+
+            # Convert the original image to RGBA
+            image_rgba = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
+
+            # Blend the transparent layer with the original image
+            blended_image = cv2.addWeighted(image_rgba, 1.0, transparent_layer, 1.0, 0)
+
+            # Convert back to BGR if needed
+            final_image = cv2.cvtColor(blended_image, cv2.COLOR_BGRA2BGR)
+
+            # Copy the blended image back to the original image
+            image[:, :] = final_image
+
             return startpoint, endpoint
 
         def NewPos(self,image,AnchorStartPoint,AnchorEndPoint,offset = 20,length = 4 , absoulute_offset = 40, absolute_length = False):
@@ -189,7 +209,7 @@ class VirGuitar():
             for stringLine in range(lines):
                 start,end = self.NewPos(image,AnchorStartPoint,AnchorEndPoint,offset = Stoffset, absolute_length=absolute_length , absoulute_offset = absoulute_offset , length = length)
                 start = self.LineOffset(end[0],end[1],start[0],start[1],value = fretOffset)
-                self.DrawLine(image, start, end, length=length,Hand=False,log=log,Lncolor=col[stringLine],thick=thickness)
+                self.DrawLine(image, start, end, length=length,Hand=False,log=log,Lncolor=(0,0,0,0),thick=thickness)
                 posList.append((start,end))
                 Stoffset += offset
 
@@ -241,13 +261,13 @@ class VirGuitar():
 
                 angle = np.arctan2(index_tip_coords[1] - wrist_coords[1], index_tip_coords[0] - wrist_coords[0]) * 180 / np.pi
 
-                angle += 0 
+                angle += 180 
 
                 guitar_image = cv2.flip(guitar_image, 1)
 
                 distance = int(np.linalg.norm(np.array(wrist_coords) - np.array(index_tip_coords)))
 
-                size_multiplier = 1.2  # Increase or decrease this value to change the size
+                size_multiplier = 1.7  # Increase or decrease this value to change the size
 
                 scaling_factor = (distance / guitar_image.shape[1]) * size_multiplier
                 guitar_resized = cv2.resize(guitar_image, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
@@ -279,6 +299,16 @@ class VirGuitar():
                 return image
 
         def start(self):
+            desired_width = 7200  # Adjust the width as needed
+            desired_height = 480  # Adjust the height as needed
+
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, desired_width)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
+
+            # Get screen dimensions
+            monitor = get_monitors()[0]
+            screen_width = monitor.width
+            screen_height = monitor.height
             while self.cap.isOpened():
                 image, results = self.initializeHandsCode(self.hands, self.cap)
 
@@ -355,6 +385,11 @@ class VirGuitar():
                     cv2.putText(image, "No Hands Detected", (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, self.color, 2)
 
                 cv2.putText(image, "Press 'q' to quit", (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
+                half_screen_width = screen_width // 2
+                half_screen_height = screen_height // 2
+                image = cv2.resize(image, (half_screen_width, half_screen_height))
+
                 self.showImage(image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
