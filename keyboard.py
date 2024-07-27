@@ -93,7 +93,7 @@ class Piano():
     def change_color(self, img, pressed_keys):
         white_keys = [self.white[i] for i in pressed_keys['White']]
         black_keys = [self.black[i] for i in pressed_keys['Black']]
-        img = cv2.fillPoly(img, white_keys, (0, 255, 0))
+        img = cv2.fillPoly(img, white_keys, (0, 0, 128))
         img = cv2.polylines(img, self.white, True, (0, 0, 0), 2)
         img = cv2.fillPoly(img, self.black, (0, 0, 0))
         img = cv2.fillPoly(img, black_keys, (128, 128, 128))

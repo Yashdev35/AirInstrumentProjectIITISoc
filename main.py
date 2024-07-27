@@ -131,9 +131,7 @@ class VirPiano():
             
             self.image = volControl(self.image, self.x, self.y)
             
-            cv2.putText(self.image, "River Flows in You", (1400, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
-            cv2.putText(self.image, "Für Elise", (1400, 80), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
-            cv2.putText(self.image, "Clair de Lune”", (1400, 110), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
+            cv2.putText(self.image, "Tunes press to discover", (1446, 30), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.rectangle(self.image, (1690, 40), (1850, 60), (0, 0, 0), 3)
             cv2.rectangle(self.image, (1690, 70), (1850, 90), (0, 0, 0), 3)
             cv2.rectangle(self.image, (1690, 100), (1850, 120), (0, 0, 0), 3)
@@ -144,9 +142,9 @@ class VirPiano():
                 for i in range(len(pressed_notes1)):
                     pressed_keys2['White'].append(pressed_keys1["White"][i])
                     #pressed_keys2['Black'].append(pressed_keys1["Black"][i])
-                    time.sleep(0.2)
+                    time.sleep(0.002)
                     self.image=self.piano_keyboard.change_color(self.image,pressed_keys2)
-                    play_piano_sound(pressed_notes1[i])
+                    play_piano_sound([pressed_notes1[i]])
                     pressed_keys2 = {"White":[],"Black":[]}
             
             cv2.namedWindow("Hand detection", cv2.WINDOW_NORMAL)

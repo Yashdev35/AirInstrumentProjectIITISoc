@@ -40,15 +40,15 @@ def auto_play(x, y, img, white,black,white_piano_notes,black_piano_notes):
             for (x__,y__) in zip(x_, y_):
                 if inside([x__, y__], [1690, 40], [1850, 60]):
                     cv2.rectangle(img, (1690, 40), (1850, 60), (255, 255, 255), cv2.FILLED)
-                    cv2.putText(img, "River Flows in You", (1400, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
+                    cv2.putText(img, "River Flows in U", (1400, 60), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
                     pressed_keys,pressed_notes = sound_to_play(River,white,black,white_piano_notes,black_piano_notes)
                 if inside([x__, y__], [1690, 70], [1850, 90]):
                     cv2.rectangle(img, (1690, 70), (1850, 90), (255, 255, 255), cv2.FILLED)
-                    cv2.putText(img, "Für Elise", (1400, 80), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
+                    cv2.putText(img, "Fur Elise", (1400, 90), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
                     pressed_keys,pressed_notes = sound_to_play(Fur,white,black,white_piano_notes,black_piano_notes)
                 if inside([x__, y__], [1690, 100], [1850, 120]):
                     cv2.rectangle(img, (1690, 100), (1850, 120), (255, 255, 255), cv2.FILLED)
-                    cv2.putText(img, "Clair de Lune”", (1400, 110), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
+                    cv2.putText(img, "Clair de Lune", (1400, 120), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
                     pressed_keys,pressed_notes = sound_to_play(Clair,white,black,white_piano_notes,black_piano_notes)
                 else:
                     continue
