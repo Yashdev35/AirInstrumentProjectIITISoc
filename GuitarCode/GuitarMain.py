@@ -4,9 +4,20 @@ from pyautogui import size
 from math import sin, cos, atan2, pi
 from pygame import mixer
 import numpy as np
-from volumeguesturecontrol_guitar import volControlGuitar
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from screeninfo import get_monitors
+import math
 
+# Initialize system audio control
+devices = AudioUtilities.GetSpeakers()
+interface = devices.Activate(
+    IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+volume = cast(interface, POINTER(IAudioEndpointVolume))
+volRange = volume.GetVolumeRange()
+minVol = volRange[0]
+maxVol = volRange[1]
 class VirGuitar():
         def __init__(self):
             self.SoundChannel, self.sound = self.initializeMusic()
@@ -24,6 +35,40 @@ class VirGuitar():
                 self.OneHandExist = False
 
             self.start() 
+
+        def volControlGuitar(self, img, landmarks):
+            if len(landmarks) != 0:
+                for hand_landmarks in landmarks:
+                    # Get the coordinates of the thumb tip (landmark 4) and the index finger tip (landmark 8)
+                    x1, y1 = int(hand_landmarks.landmark[4].x * img.shape[1]), int(hand_landmarks.landmark[4].y * img.shape[0])
+                    x2, y2 = int(hand_landmarks.landmark[8].x * img.shape[1]), int(hand_landmarks.landmark[8].y * img.shape[0])
+                    cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+
+                    # Visual elements on the image for debugging or feedback
+                    cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
+                    cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
+                    cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
+                    cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+
+                    # Calculate the length between the thumb tip and the index finger tip
+                    length = math.hypot(x2 - x1, y2 - y1)
+
+                    # Interpolate volume levels
+                    vol = np.interp(length, [50, 300], [minVol, maxVol])
+                    self.volBar = np.interp(length, [50, 300], [400, 150])
+                    self.volPer = np.interp(length, [50, 300], [0, 100])
+
+                    # Set the system volume
+                    volume.SetMasterVolumeLevel(vol, None)
+
+                    # Visual feedback for volume level
+                    if length < 50:
+                        cv2.circle(img, (cx, cy), 15, (0, 255, 0), cv2.FILLED)
+                    cv2.rectangle(img, (50, 150), (85, 400), (255, 0, 0), 3)
+                    cv2.rectangle(img, (50, int(self.volBar)), (85, 400), (255, 0, 0), cv2.FILLED)
+                    cv2.putText(img, f'{int(self.volPer)} %', (40, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 3)
+
+            return img    
 
         def rainbow_gradient(self,num_colors):
             colors = []
@@ -312,7 +357,7 @@ class VirGuitar():
             while self.cap.isOpened():
                 image, results = self.initializeHandsCode(self.hands, self.cap)
 
-                self.color = (0, 255, 0)
+                self.color = (0, 0, 0)
                 initial_y_position = 30
                 line_height = 25
 
@@ -326,7 +371,7 @@ class VirGuitar():
                     y_position += line_height
                     cv2.putText(image, "Keep them close to the camera.", (10, y_position), cv2.FONT_HERSHEY_SIMPLEX, 0.6, self.color, 2)
                     landmarks = results.multi_hand_landmarks
-                    image = volControlGuitar(image, landmarks)
+                    image = self.volControlGuitar(image, landmarks)
 
                 if results.multi_hand_landmarks and len(results.multi_hand_landmarks) == 2:
                     y_position = initial_y_position
