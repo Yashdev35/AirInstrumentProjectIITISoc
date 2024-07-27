@@ -95,6 +95,8 @@ class VirPiano():
 
             pressed_keys={"White":[],"Black":[]}
             pressed_notes=[]
+            pressed_keys1={"White":[],"Black":[]}
+            pressed_notes1=[]
             if len(self.previous_x)==len(self.x):
                 for (x_,y_),(previous_x_,previous_y_) in zip(zip(self.x,self.y),zip(self.previous_x,self.previous_y)):
                     tapped_keys=tap_detection(previous_y_,y_,self.tap_threshold)
@@ -121,18 +123,32 @@ class VirPiano():
             currentTime = time.time()
             fps = 1 / (currentTime - previousTime)
             previousTime = currentTime
+            
             cv2.putText(self.image, str(int(fps)) + "FPS", (10, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.putText(self.image, '+', (700, 55), cv2.FONT_HERSHEY_TRIPLEX, 1, (128, 0, 0), 3)
             cv2.putText(self.image, '-', (700, 95), cv2.FONT_HERSHEY_TRIPLEX, 1, (128, 0, 0), 3)
             cv2.circle(self.image, (710, 60), 40, (0,0,0), thickness=1)
+            
             self.image = volControl(self.image, self.x, self.y)
+            
             cv2.putText(self.image, "River Flows in You", (1400, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.putText(self.image, "Für Elise", (1400, 80), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.putText(self.image, "Clair de Lune”", (1400, 110), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.rectangle(self.image, (1690, 40), (1850, 60), (0, 0, 0), 3)
             cv2.rectangle(self.image, (1690, 70), (1850, 90), (0, 0, 0), 3)
             cv2.rectangle(self.image, (1690, 100), (1850, 120), (0, 0, 0), 3)
-            self.image = auto_play(self.x, self.y, self.image)    
+            
+            pressed_keys2 = {"White":[],"Black":[]}
+            self.image, pressed_keys1, pressed_notes1 = auto_play(self.x, self.y, self.image,self.piano_keyboard.white,self.piano_keyboard.black,self.white_piano_notes,self.black_piano_notes)    
+            if len(pressed_notes1)>0:
+                for i in range(len(pressed_notes1)):
+                    pressed_keys2['White'].append(pressed_keys1["White"][i])
+                    #pressed_keys2['Black'].append(pressed_keys1["Black"][i])
+                    time.sleep(0.2)
+                    self.image=self.piano_keyboard.change_color(self.image,pressed_keys2)
+                    play_piano_sound(pressed_notes1[i])
+                    pressed_keys2 = {"White":[],"Black":[]}
+            
             cv2.namedWindow("Hand detection", cv2.WINDOW_NORMAL)
             cv2.imshow('Hand detection', self.image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
