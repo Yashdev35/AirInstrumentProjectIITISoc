@@ -14,25 +14,25 @@ Welcome to the Air Instrument Project! This innovative project leverages the pow
 
 ![Guitar Demo](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/Guitar_demo.mp4)
 
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarss.png
+- ![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarss.png)
 
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarssv.png
+- ![2](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/guitarssv.png)
 
 *The virtual guitar demo showcases chord playing and volume control through hand movements.*
 
 ### Piano
 
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo.jpg
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo2.jpg
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo3.jpg
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/piano1.jpg
+-![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo.jpg)
+-![2](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo2.jpg)
+-![3](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/pianoDemo3.jpg)
+-![4](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/piano1.jpg)
 
 *In this demo, you can see how the virtual piano responds to finger gestures for playing notes and adjusting volume.*
 
 ### Drums
 
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum.jpg
-- https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum2.jpg
+- ![1](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum.jpg)
+- ![2](https://github.com/Yashdev35/AirInstrumentProjectIITISoc/blob/main/demos/drum2.jpg)
 
 *Watch the virtual drums in action, with each drum and cymbal responding to specific hand gestures.*
 
