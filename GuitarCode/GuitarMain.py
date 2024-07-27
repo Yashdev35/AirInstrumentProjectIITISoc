@@ -252,7 +252,7 @@ class VirGuitar():
         def FingerLog(self,point,finger):
             print("Finger {} => x: {} y: {} z: {}".format(finger,point[finger].x, point[finger].y,point[finger].z))
             
-        guitar_image = cv2.imread('guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
+        guitar_image = cv2.imread('GuitarCode/guitar.png', cv2.IMREAD_UNCHANGED)  # Ensure the guitar image has an alpha channel
 
         def overlayGuitar(self, image, wrist1, wrist2, guitar_image):
             try:
