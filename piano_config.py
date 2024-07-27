@@ -27,8 +27,8 @@ def get_coordinates(shape,distance_threshold):
         cv2.imshow('Piano Configuration',frame)
         cv2.waitKey(1)
         if len(hd.x) != 0:
-            rect_width = 400
-            rect_height = 150
+            rect_width = 1600
+            rect_height = 350
             [center_x, center_y] = hd.x[0][8], hd.y[0][8]
             [forefinger_x0,forefinger_y0] = hd.x[0][8],hd.y[0][8]
             [middlefinger_x0,middlefinger_y0] = hd.x[0][12],hd.y[0][12]
@@ -40,10 +40,10 @@ def get_coordinates(shape,distance_threshold):
             distance = cv2.norm(np.array((forefinger_x0,forefinger_y0)), np.array((middlefinger_x0,middlefinger_y0)), cv2.NORM_L2)
             if distance < distance_threshold:
                 pts = [
-                [[((center_x) - (rect_width / 2)), ((center_y) + (rect_height / 2))]],
-                [[((center_x) + (rect_width / 2)), ((center_y) + (rect_height / 2))]],
+                [[((center_x) - (rect_width / 2)), ((center_y) - (rect_height / 2))]],
                 [[((center_x) + (rect_width / 2)), ((center_y) - (rect_height / 2))]],
-                [[((center_x) - (rect_width / 2)), ((center_y) - (rect_height / 2))]]
+                [[((center_x) + (rect_width / 2)), ((center_y) + (rect_height / 2))]],
+                [[((center_x) - (rect_width / 2)), ((center_y) + (rect_height / 2))]]
                 ]
                 cap1.release()
                 cv2.destroyAllWindows()
