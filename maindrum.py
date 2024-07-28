@@ -214,11 +214,12 @@ while True:
 
     handle_mask(red_mask, frame, positions)
     handle_mask(blue_mask, frame, positions)
+    cv2.putText(frame, "Press 'q' to quit", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
 
     cv2.imshow("frame", frame)
     
-    key = cv2.waitKey(1)
-    if key == 27:
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 # Stop recording

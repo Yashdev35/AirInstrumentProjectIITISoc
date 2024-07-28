@@ -1,0 +1,11 @@
+pyautogui
+imutils
+opencv-python
+numpy
+mediapipe
+pycaw
+comtypes
+pygame
+screeninfo
+pyaudio
+wave

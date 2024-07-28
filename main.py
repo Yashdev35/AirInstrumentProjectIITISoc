@@ -124,7 +124,7 @@ class VirPiano():
             fps = 1 / (currentTime - previousTime)
             previousTime = currentTime
             
-            cv2.putText(self.image, str(int(fps)) + "FPS", (10, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
+            cv2.putText(self.image, "Press 'q' to quit", (10, 50), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 1)
             cv2.putText(self.image, '+', (700, 55), cv2.FONT_HERSHEY_TRIPLEX, 1, (128, 0, 0), 3)
             cv2.putText(self.image, '-', (700, 95), cv2.FONT_HERSHEY_TRIPLEX, 1, (128, 0, 0), 3)
             cv2.circle(self.image, (710, 60), 40, (0,0,0), thickness=1)
