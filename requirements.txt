@@ -7,7 +7,6 @@ imutils
 pygame
 pyaudio
 wave
-threading
 screeninfo
 pycaw
 comtypes
