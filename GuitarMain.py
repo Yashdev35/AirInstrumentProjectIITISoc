@@ -306,7 +306,7 @@ class VirGuitar():
 
                 angle = np.arctan2(index_tip_coords[1] - wrist_coords[1], index_tip_coords[0] - wrist_coords[0]) * 180 / np.pi
 
-                angle += 165 
+                angle += 170 
 
                 guitar_image = cv2.flip(guitar_image, 1)
 
