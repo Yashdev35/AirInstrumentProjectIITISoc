@@ -70,30 +70,30 @@ class VirGuitar():
 
             return img    
 
-        def rainbow_gradient(self,num_colors):
-            colors = []
-            for i in range(num_colors):
-                r, g, b = 0, 0, 0
-                if 0 <= i < num_colors/6:
-                    r = 255
-                    g = int(255*i/(num_colors/6))
-                elif num_colors/6 <= i < num_colors/3:
-                    r = 255 - int(255*(i-num_colors/6)/(num_colors/6))
-                    g = 255
-                elif num_colors/3 <= i < num_colors/2:
-                    g = 255
-                    b = int(255*(i-num_colors/3)/(num_colors/6))
-                elif num_colors/2 <= i < 2*num_colors/3:
-                    g = 255 - int(255*(i-num_colors/2)/(num_colors/6))
-                    b = 255
-                elif 2*num_colors/3 <= i < 5*num_colors/6:
-                    r = int(255*(i-2*num_colors/3)/(num_colors/6))
-                    b = 255
-                elif 5*num_colors/6 <= i < num_colors:
-                    r = 255
-                    b = 255 - int(255*(i-5*num_colors/6)/(num_colors/6))
-                colors.append((r, g, b))
-            return colors
+        # def rainbow_gradient(self,num_colors):
+        #     colors = []
+        #     for i in range(num_colors):
+        #         r, g, b = 0, 0, 0
+        #         if 0 <= i < num_colors/6:
+        #             r = 255
+        #             g = int(255*i/(num_colors/6))
+        #         elif num_colors/6 <= i < num_colors/3:
+        #             r = 255 - int(255*(i-num_colors/6)/(num_colors/6))
+        #             g = 255
+        #         elif num_colors/3 <= i < num_colors/2:
+        #             g = 255
+        #             b = int(255*(i-num_colors/3)/(num_colors/6))
+        #         elif num_colors/2 <= i < 2*num_colors/3:
+        #             g = 255 - int(255*(i-num_colors/2)/(num_colors/6))
+        #             b = 255
+        #         elif 2*num_colors/3 <= i < 5*num_colors/6:
+        #             r = int(255*(i-2*num_colors/3)/(num_colors/6))
+        #             b = 255
+        #         elif 5*num_colors/6 <= i < num_colors:
+        #             r = 255
+        #             b = 255 - int(255*(i-5*num_colors/6)/(num_colors/6))
+        #         colors.append((r, g, b))
+        #     return colors
 
 
 
@@ -239,7 +239,7 @@ class VirGuitar():
 
         def DrawBoard(self,image, AnchorStartPoint,AnchorEndPoint , lines = 4, offset = 0,dynamic = False,log = False , length = 2, thickness = 4 , absolute_length = False, absoulute_offset = 0 , fretOffset = 0):
 
-            col = self.rainbow_gradient(lines)
+            #col = self.rainbow_gradient(lines)
 
             posList = []
 
